@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // As informações gerais sobre um assembly são controladas por
 // conjunto de atributos. Altere estes valores de atributo para modificar as informações
 // associada a um assembly.
-[assembly: AssemblyTitle("Alura.EFCore2.Console")]
+[assembly: AssemblyTitle("Alura.EFCore2.Console2")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Alura.EFCore2.Console")]
+[assembly: AssemblyProduct("Alura.EFCore2.Console2")]
 [assembly: AssemblyCopyright("Copyright ©  2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // O GUID a seguir será destinado à ID de typelib se este projeto for exposto para COM
-[assembly: Guid("e6636433-41b7-4338-a0df-c3c62bd63eec")]
+[assembly: Guid("9a54a8d1-947c-4cc1-bed9-9b5f60aae414")]
 
 // As informações da versão de um assembly consistem nos quatro valores a seguir:
 //
