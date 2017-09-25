@@ -6,9 +6,9 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
-namespace Alura.EFCore2.Curso.Aula8
+namespace Alura.EFCore2.Curso.CargaParaOCurso
 {
-    class ChamandoViewsComFromSql
+    class VinteIdiomasOriginais
     {
         private class Ator
         {
@@ -415,41 +415,25 @@ namespace Alura.EFCore2.Curso.Aula8
         }
 
         /// <summary>
-        ///     Pré-requisitos:
-        ///         - banco de dados AluraFilmes criado e populado
-        ///         - EF Core instalado no projeto
-        ///         - classe LogSQLExtensions criada para logar o SQL
-        ///     Objetivos:
-        ///         - mas esse SELECT não é bom ficar chapado na string
-        ///         - podemos usar uma VIEW armazenada no banco de dados
-        ///         - mas como usar no EF? É possível?
-        ///         - mostrar docs da Microsoft dizendo que não é suportado
-        ///         - que existe uma issue para implementar no futuro
-        ///         - mas é possível usar do mesmo jeito que fizemos no vídeo anterior
-        ///         - legal!
-        ///         - e com Stored Procedures?
+        /// Atualiza 20 filmes com idiomas originais randômicos.
         /// </summary>
         public static void Main()
         {
             using (var contexto = new AluraFilmesContexto())
             {
-                //habilitar o log depois de executar uma vez o LINQ!
                 contexto.StartLogSqlToConsole();
 
-                //para usar views fazemos igualzinho ao vídeo anterior!
-                var atoresMaisAtuantes = contexto.Atores
-                    .FromSql("select a.* from actor a inner join dbo.top5_most_starred_actors top5 on a.actor_id = top5.actor_id")
-                    .Include(a => a.Filmografia);
+                var filmes = contexto.Filmes.Take(20);
+                var idiomas = contexto.Idiomas.ToList();
 
-                atoresMaisAtuantes
-                    .ToList()
-                    .ForEach(a => MostrarAtuacao(a.PrimeiroNome, a.Filmografia.Count));
+                foreach (var filme in filmes)
+                {
+                    filme.IdiomaOriginal = idiomas.RandomItem();
+                }
+
+                contexto.SaveChanges();
+
             }
-        }
-
-        private static void MostrarAtuacao(String nome, int totalDeFilmes)
-        {
-            Console.WriteLine($"Ator {nome} estrelou em ({totalDeFilmes} filmes)");
         }
     }
 }

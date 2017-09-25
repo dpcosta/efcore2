@@ -6,9 +6,9 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
-namespace Alura.EFCore2.Curso.Aula6
+namespace Alura.EFCore2.Curso.Aula9
 {
-    class MultiplosRelacionamentosEntreMesmasTabelas
+    class ChamandoViewsComFromSql
     {
         private class Ator
         {
@@ -279,11 +279,123 @@ namespace Alura.EFCore2.Curso.Aula6
             }
         }
 
+        private class Funcionario : Pessoa
+        {
+            public string Login { get; set; }
+            public string Senha { get; set; }
+
+            public override string ToString()
+            {
+                return base.ToString() + $" cujo login é {Login}";
+            }
+        }
+
+        private class Cliente : Pessoa
+        {
+            public DateTime DataCriacao { get; set; }
+
+            public override string ToString()
+            {
+                return base.ToString() + $" criado em {DataCriacao:dd/MM/yyyy}";
+            }
+
+        }
+
+        private class FuncionarioConfiguracao
+        {
+            public static void Configurar(EntityTypeBuilder<Funcionario> entityBuilder)
+            {
+                PessoaConfiguracao<Funcionario>.Configurar(entityBuilder);
+
+                entityBuilder
+                    .ToTable("staff")
+                    .HasKey(f => f.Id)
+                    .HasName("pk_staff");
+
+                entityBuilder
+                    .Property(f => f.Id)
+                    .HasColumnName("staff_id");
+
+                entityBuilder
+                    .Property(f => f.Login)
+                    .HasColumnName("username")
+                    .HasColumnType("varchar(16)");
+
+                entityBuilder
+                    .Property(f => f.Senha)
+                    .HasColumnName("password")
+                    .HasColumnType("varchar(40");
+            }
+        }
+
+        private abstract class Pessoa
+        {
+            public byte Id { get; set; }
+            public string PrimeiroNome { get; set; }
+            public string UltimoNome { get; set; }
+            public bool Ativo { get; set; }
+            public string Email { get; set; }
+
+            public override string ToString()
+            {
+                string tipo = this.GetType().Name;
+                return $"{tipo} {Id} {PrimeiroNome} {UltimoNome} - {Ativo}";
+            }
+        }
+
+        private class PessoaConfiguracao<T> where T : Pessoa
+        {
+            public static void Configurar(EntityTypeBuilder<T> entityBuilder)
+            {
+                entityBuilder
+                    .Property(p => p.PrimeiroNome)
+                    .HasColumnName("first_name")
+                    .HasColumnType("varchar(45)");
+
+                entityBuilder
+                    .Property(p => p.UltimoNome)
+                    .HasColumnName("last_name")
+                    .HasColumnType("varchar(45)");
+
+                entityBuilder
+                    .Property(p => p.Email)
+                    .HasColumnName("email")
+                    .HasColumnType("varchar(50)");
+
+                entityBuilder
+                    .Property(p => p.Ativo)
+                    .HasColumnName("active");
+            }
+        }
+
+        private class ClienteConfiguracao
+        {
+            public static void Configurar(EntityTypeBuilder<Cliente> entityBuilder)
+            {
+                PessoaConfiguracao<Cliente>.Configurar(entityBuilder);
+
+                entityBuilder
+                    .ToTable("customer")
+                    .HasKey(c => c.Id)
+                    .HasName("pk_customer");
+
+                entityBuilder
+                    .Property(c => c.Id)
+                    .HasColumnName("customer_id");
+
+                entityBuilder
+                    .Property(c => c.DataCriacao)
+                    .HasColumnName("create_date");
+            }
+        }
+
         private class AluraFilmesContexto : DbContext
         {
             public DbSet<Ator> Atores { get; set; }
             public DbSet<Filme> Filmes { get; set; }
             public DbSet<Idioma> Idiomas { get; set; }
+            public DbSet<Funcionario> Funcionarios { get; set; }
+            public DbSet<Cliente> Clientes { get; set; }
 
             protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             {
@@ -297,6 +409,8 @@ namespace Alura.EFCore2.Curso.Aula6
                 FilmeConfiguracao.Configurar(modelBuilder.Entity<Filme>());
                 FilmeAtorConfiguracao.Configurar(modelBuilder.Entity<FilmeAtor>());
                 IdiomaConfiguracao.Configurar(modelBuilder.Entity<Idioma>());
+                FuncionarioConfiguracao.Configurar(modelBuilder.Entity<Funcionario>());
+                ClienteConfiguracao.Configurar(modelBuilder.Entity<Cliente>());
             }
         }
 
@@ -306,60 +420,36 @@ namespace Alura.EFCore2.Curso.Aula6
         ///         - EF Core instalado no projeto
         ///         - classe LogSQLExtensions criada para logar o SQL
         ///     Objetivos:
-        ///         - vamos mapear agora a relação Filme x Idioma
-        ///         - repare que um filme tem dois idiomas: um original (que pode ser nulo), outro que indica o idioma da mídia em estoque (não nulo)
-        ///         - neste caso, como fazer? neste caso não podemos contar com as convenções
-        ///         - primeiro vamos criar a classe Idioma e configurar seu mapeamento
-        ///         - fazer um SELECT pra testar
-        ///         - erro no tipo language_id: mudar prop pra byte
-        ///         - funfou
-        ///         - agora mapear os 2 relacionamentos 1 x N - TESTAR SE VAI FUNFAR SEM CONFIGURAR
-        ///         - 1o) relação IdiomaFalado; relembrar termos...
-        ///             - Entidade Principal: Idioma
-        ///             - Entidade Dependente: Filme
-        ///             - Chave Estrangeira: shadow property Filme.language_id
-        ///             - Chave Principal: Idioma.Id
-        ///             - Navegação Coleção: Idioma.FilmesFalados
-        ///             - Navegação Referência: Filme.IdiomaFalado
-        ///             - criar relação 
-        ///             - lembrar que essa relação é NOT NULL (script tem que acusar...)
-        ///         - 2o) relação IdiomaOriginal; relembrar termos:
-        ///             - Entidade Principal: Idioma
-        ///             - Entidade Dependente: Filme
-        ///             - Chave Estrangeira: shadow property Filme.original_language_id
-        ///             - Chave Principal: Idioma.Id
-        ///             - Navegação Coleção: Idioma.FilmesOriginais
-        ///             - Navegação Referência: Filme.IdiomaOriginal
-        ///             - criar relação 
-        ///             - lembrar que essa relação pode ser NULL (script tem que acusar...)
-        ///             - ou seja, colocar Property<byte?> na shadow property
-        ///          - fazer um SELECT em filmes com idioma falado == "French"
-        ///          - necessário rodar um script de carga
+        ///         - mas esse SELECT não é bom ficar chapado na string
+        ///         - podemos usar uma VIEW armazenada no banco de dados
+        ///         - mas como usar no EF? É possível?
+        ///         - mostrar docs da Microsoft dizendo que não é suportado
+        ///         - que existe uma issue para implementar no futuro
+        ///         - mas é possível usar do mesmo jeito que fizemos no vídeo anterior
+        ///         - legal!
+        ///         - e com Stored Procedures?
         /// </summary>
-        static void Main()
+        public static void Main()
         {
             using (var contexto = new AluraFilmesContexto())
             {
+                //habilitar o log depois de executar uma vez o LINQ!
                 contexto.StartLogSqlToConsole();
 
-                foreach (var idioma in contexto.Idiomas)
-                {
-                    Console.WriteLine(idioma);
-                }
+                //para usar views fazemos igualzinho ao vídeo anterior!
+                var atoresMaisAtuantes = contexto.Atores
+                    .FromSql("select a.* from actor a inner join dbo.top5_most_starred_actors top5 on a.actor_id = top5.actor_id")
+                    .Include(a => a.Filmografia);
 
-                var idiomaPesquisado = "French";
-                Console.WriteLine($"\nFilmes cujo idioma falado é {idiomaPesquisado}:");
-                var filmesNoIdiomaPesquisado = contexto.Filmes
-                    .Include(f => f.IdiomaFalado)
-                    .Include(f => f.IdiomaOriginal)
-                    .Where(f => f.IdiomaFalado.Nome == idiomaPesquisado);
-
-                foreach (var filme in filmesNoIdiomaPesquisado)
-                {
-                    Console.WriteLine(filme);
-                }
-
+                atoresMaisAtuantes
+                    .ToList()
+                    .ForEach(a => MostrarAtuacao(a.PrimeiroNome, a.Filmografia.Count));
             }
+        }
+
+        private static void MostrarAtuacao(String nome, int totalDeFilmes)
+        {
+            Console.WriteLine($"Ator {nome} estrelou em ({totalDeFilmes} filmes)");
         }
     }
 }

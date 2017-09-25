@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{E6636433-41B7-4338-A0DF-C3C62BD63EEC}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Alura.EFCore2.Curso</RootNamespace>
-    <AssemblyName>Alura.EFCore2.Curso</AssemblyName>
+    <RootNamespace>Alura.EFCore2.Projeto</RootNamespace>
+    <AssemblyName>Alura.EFCore2.Projeto</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -32,7 +32,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>Alura.EFCore2.Curso.Aula8.QuandoEhNecessarioAssumirAsRedeas</StartupObject>
+    <StartupObject>Alura.EFCore2.Curso.Aula1.GerandoSqlExceptionDevidoAusenciaDeMapeamento</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.AspNetCore.Hosting.Abstractions, Version=1.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
@@ -151,12 +151,15 @@
     <Compile Include="Aula7\MapeandoHeranca.cs" />
     <Compile Include="Aula8\FromSqlESuasLimitacoes.cs" />
     <Compile Include="Aula8\QuandoEhNecessarioAssumirAsRedeas.cs" />
-    <Compile Include="Aula8\StoredProceduresComExecuteSqlCommand.cs" />
+    <Compile Include="Aula9\EnviandoComandosInsertUpdateDelete.cs" />
+    <Compile Include="Aula9\StoredProceduresComExecuteSqlCommand.cs" />
     <Compile Include="Aula8\SuperandoAsLimitacoes.cs" />
-    <Compile Include="Aula8\ChamandoViewsComFromSql.cs" />
+    <Compile Include="Aula9\ChamandoViewsComFromSql.cs" />
     <Compile Include="CargaParaOCurso\DezIdiomasComoFrances.cs" />
+    <Compile Include="CargaParaOCurso\VinteIdiomasOriginais.cs" />
     <Compile Include="Extensions\DBTableInfoExtensions.cs" />
     <Compile Include="Extensions\LogSQLExtensions.cs" />
+    <Compile Include="Extensions\RandomListItemExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

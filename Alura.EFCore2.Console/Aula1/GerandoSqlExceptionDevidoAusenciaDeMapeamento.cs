@@ -34,9 +34,11 @@ namespace Alura.EFCore2.Curso.Aula1
         ///         - EF Core instalado no projeto
         ///         - classe LogSQLExtensions criada para logar o SQL
         ///     Objetivos:
+        ///         - vídeo anterior: preparando o ambiente
         ///         - executar e observar a SqlException 'invalid object name "Atores"'
         ///         - mostrar o SQL gerado
         ///         - explicar o processo de mapeamento, cujo primeiro passo é Usar Convenções
+        ///         - próximo vídeo: configurando o nome da tabela usando anotações
         /// </summary>
         static void Main()
         {

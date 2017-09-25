@@ -1,15 +1,21 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Diagnostics;
+using System.Collections.Generic;
 
 namespace Alura.EFCore2.Curso.Extensions
 {
     internal class SqlLoggerProvider : ILoggerProvider
     {
+        private IList<string> categoriasASeremLogadas = new List<string>
+        {
+            DbLoggerCategory.Model.Name,
+            DbLoggerCategory.Database.Command.Name,
+            DbLoggerCategory.Model.Validation.Name
+        };
+
         public static ILoggerProvider Create()
         {
             return new SqlLoggerProvider();
@@ -17,7 +23,7 @@ namespace Alura.EFCore2.Curso.Extensions
 
         public ILogger CreateLogger(string categoryName)
         {
-            if (categoryName == typeof(IRelationalCommandBuilderFactory).FullName)
+            if (categoriasASeremLogadas.Contains(categoryName))
             {
                 return new SqlLogger();
             }
@@ -68,7 +74,7 @@ namespace Alura.EFCore2.Curso.Extensions
         }
     }
 
-    public static class LogSQLExtensions
+    public static class DbContextExtensions
     {
 
         public static void StartLogSqlToConsole(this DbContext contexto)

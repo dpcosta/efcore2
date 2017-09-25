@@ -215,14 +215,14 @@ namespace Alura.EFCore2.Curso.Aula6
         ///         - EF Core instalado no projeto
         ///         - classe LogSQLExtensions criada para logar o SQL
         ///     Objetivos:
-        ///         - agora vamor relacionar atores a filmes
+        ///         - agora vamos relacionar atores a filmes
         ///         - sabemos que um ator pode estrelar vários filmes
         ///         - ...e um filme tem um elenco com vários atores
         ///         - relacionamento Muitos para Muitos
         ///         - no curso anterior vimos que o EF Core não suporta M para N sem uma classe de join
         ///         - vamos modelar isso em nossas classes
         ///         - criar classe FilmeAtor, com propriedades de navegação Filme e Ator
-        ///         - e as chave primária? No banco ela é formada pela junção de actor_id e film_id
+        ///         - e a chave primária? No banco ela é formada pela junção de actor_id e film_id
         ///         - criar classe de configuração com a definição da chave
         ///         - gerar o script e verificar se está ok
         ///         - observar que essa tabela não serve de nada, precisamos dos relacionamentos

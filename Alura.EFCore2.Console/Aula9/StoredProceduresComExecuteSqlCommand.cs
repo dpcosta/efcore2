@@ -4,9 +4,10 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Data.SqlClient;
 using System.Linq;
 
-namespace Alura.EFCore2.Curso.Aula8
+namespace Alura.EFCore2.Curso.Aula9
 {
     class StoredProceduresComExecuteSqlCommand
     {
@@ -421,10 +422,15 @@ namespace Alura.EFCore2.Curso.Aula8
         ///         - classe LogSQLExtensions criada para logar o SQL
         ///     Objetivos:
         ///         - e como usar Stored Procedures?
-        ///         - motivação: chamar a SP talz
-        ///         - dizer que retorna número de registros afetados
+        ///         - motivação: chamar a SP que retorna o total de atores distintos que atuaram em filmes de uma categoria qualquer
         ///         - usar uma SP que passa parâmetros
-        ///         - dizer que é possível usar parâmetros de saída
+        ///         - método DbContext.Database.ExecuteSqlCommand
+        ///         - importância de definir corretamente os parâmetros
+        ///           - new SqlParameter
+        ///         - usar parâmetros de saída
+        ///         - mostrar no console
+        ///         - dizer que é possível também enviar comandos UPDATE, INSERT e DELETE
+        ///         - e que o método retornar os registros afetados
         /// </summary>
         public static void Main()
         {
@@ -432,6 +438,28 @@ namespace Alura.EFCore2.Curso.Aula8
             {
                 //habilitar o log depois de executar uma vez o LINQ!
                 contexto.StartLogSqlToConsole();
+
+                var categ = "Games";
+                var nomeCateg = new SqlParameter
+                {
+                    ParameterName = "category_name",
+                    Size = 25,
+                    Value = categ
+                };
+                var totalAtores = new SqlParameter
+                {
+                    ParameterName = "total_actors",
+                    Size = 4,
+                    Direction = System.Data.ParameterDirection.Output
+                };
+
+                contexto.Database
+                    .ExecuteSqlCommand(
+                        "total_actors_from_given_category", 
+                        nomeCateg, 
+                        totalAtores);
+
+                Console.WriteLine($"O total de atores distintos da categoria {categ} é {totalAtores.Value}.");
 
                 
             }

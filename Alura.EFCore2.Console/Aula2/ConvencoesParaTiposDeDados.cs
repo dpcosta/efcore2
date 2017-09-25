@@ -52,6 +52,7 @@ namespace Alura.EFCore2.Curso.Aula2
         ///         - EF Core instalado no projeto
         ///         - classe LogSQLExtensions criada para logar o SQL
         ///     Objetivos:
+        ///         - primeiro vídeo da aula 2
         ///         - mostrar que o mapeamento de colunas ainda está equivocado:
         ///             - tipo está definido para NVARCHAR(MAX) (convenção para mapear string)
         ///             - tamanho está definido para 4000 (convenção para tamanho de string)
@@ -66,6 +67,7 @@ namespace Alura.EFCore2.Curso.Aula2
         ///         - olhar o script gerado para observar os problemas...
         ///         - mencionar também tamanho das colunas e possível problema de performance
         ///         - como resolver? configurando!
+        ///         - próximo vídeo: configurando tipo de dados
         /// </summary>
         static void Main()
         {

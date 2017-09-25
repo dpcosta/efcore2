@@ -122,7 +122,7 @@ namespace Alura.EFCore2.Curso.Aula5
         ///         - classe LogSQLExtensions criada para logar o SQL
         ///     Objetivos:
         ///         - começar novo requisito: mapear filmes
-        ///         -  usar boas práticas
+        ///         - usar boas práticas
         ///         - criar classe de configuração
         ///         - testar o SELECT
         ///         - erro no smallint de Duracao >> colocar propriedade como short
